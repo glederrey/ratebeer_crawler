@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# SPECIFIC TO THE PROJECT
+.idea
+/data
+/code/log*.txt
