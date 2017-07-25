@@ -30,15 +30,11 @@ After running the code, you will get a folder called `data` with several subfold
 ## Procedure
 
 1. **Crawl** all the places (countries and regions)
-2. **Crawl** all the *open* breweries from these places
-3. **Parse** the breweries from these places and create a CSV file (*breweries.csv*)
-4. **Crawl** the remaining pages from the breweries (if more than 20 beers per brewery)
-5. **Crawl** all the *closed* breweries
-6. **Parse** all the missing breweries and add them to the CSV file (*breweries.csv*)
-7. **Parse** all the breweries to add the number of beers to the CSV file (*breweries.csv*)
-8. **Parse** all the breweries to get the beers and create a CSV file (*beers.csv*)
-9. **Crawl** all the beers and their reviews
-
+2. **Parse** the breweries from these places and create a CSV file (*breweries.csv*)
+3. **Crawl** all the breweries (pages with links to the beers)
+4. **Parse** all the breweries to add the number of beers to the CSV file (*breweries.csv*) and to get the beers and 
+create a CSV file (*beers.csv*)
+5. **Crawl** all the beers and their reviews
 
 ## Dates and Time when the data were scraped
 
@@ -51,6 +47,7 @@ Everything has been crawled at the same time. It started the 21st of July at XX 
 * `pandas`
 * `numpy`
 * `shutil`
+* `html`
 * `json`
 * `re`
 
