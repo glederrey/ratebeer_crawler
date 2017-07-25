@@ -5,3 +5,45 @@
 #
 # Distributed under terms of the MIT license.
 
+from classes.crawler import *
+from classes.parser import *
+import time
+import datetime
+import os
+
+
+def run():
+
+    # Create directory for the data
+    data_folder = '../data/'
+    if not os.path.exists(data_folder):
+        os.makedirs(data_folder)
+
+    print("Process starting at : {}".format(datetime.datetime.now()))
+
+    start = time.time()
+
+    # Initialize classes
+    delta_t = 0.5
+    crawler = Crawler(delta_t, data_folder)
+    nbr_threads = 10
+    parser = Parser(nbr_threads, data_folder)
+
+    print('1. Crawling all the places...')
+    crawler.crawl_all_places()
+
+    print('2. Parsing the breweries from the places...')
+    parser.parse_breweries_from_places()
+
+    print('3. Crawling all the breweries...')
+    crawler.crawl_all_breweries()
+
+    print('4. Parsing the breweries to get the beers...')
+    parser.parse_brewery_files()
+
+    print('5. Crawling all the beers and their reviews...')
+    crawler.crawl_all_beers_and_reviews()
+
+
+if __name__ == "__main__":
+    run()
