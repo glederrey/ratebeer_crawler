@@ -7,6 +7,7 @@
 
 import multiprocessing as mp
 import pandas as pd
+import numpy as np
 import html
 import re
 import os
@@ -38,6 +39,15 @@ class Parser:
         self.special_places = ['United States', 'Canada', 'England', 'Germany']
         self.codes = {213: 'United_States', 39: 'Canada', 240: 'England', 79: 'Germany'}
 
+        self.country_to_change = {'British Virgin Islands': 'Virgin Islands (British)',
+                                  'United States Virgin Islands': 'Virgin Islands (U.S.)',
+                                  'Kyrgyz Republic': 'Kyrgyzstan',
+                                  'Réunion': 'Reunion',
+                                  'St Lucia': 'Saint Lucia',
+                                  'St Vincent & The Grenadines': 'Saint Vincent and The Grenadines',
+                                  'São Tomé & Principe': 'Sao Tome and Principe',
+                                  'Senegal Republic': 'Senegal'}
+
     ########################################################################################
     ##                                                                                    ##
     ##                       Parse the breweries from the places                          ##
@@ -60,13 +70,17 @@ class Parser:
 
         list_ = os.listdir(folder)
 
-        json_brewery = {'name': [], 'id': [], 'place': [], 'link': []}
+        json_brewery = {'name': [], 'id': [], 'location': [], 'link': []}
         # Go through all the countries
         for country in list_:
             # Check if the country is in the list of special countries
             if country not in self.special_places:
                 # Open the file...
                 html_txt = open(folder + country + '/brew.html', 'rb').read().decode('ISO-8859-1')
+
+                # Change name of the country to a more convenient one
+                if country in self.country_to_change:
+                    country = self.country_to_change[country]
 
                 # Unescape the HTML characters
                 html_txt = html.unescape(html_txt)
@@ -81,7 +95,7 @@ class Parser:
                     json_brewery['name'].append(g.group(3))
                     json_brewery['id'].append(g.group(2))
                     json_brewery['link'].append(link)
-                    json_brewery['place'].append(country)
+                    json_brewery['location'].append(country)
 
             else:
                 # Get the list of regions
@@ -101,7 +115,11 @@ class Parser:
                         json_brewery['name'].append(g.group(3))
                         json_brewery['id'].append(g.group(2))
                         json_brewery['link'].append(link)
-                        json_brewery['place'].append(country)
+                        if country == 'United States':
+                            place = country + ', ' + region
+                        else:
+                            place = country
+                        json_brewery['location'].append(place)
 
         # Transform into pandas DF
         df = pd.DataFrame(json_brewery)
@@ -177,6 +195,99 @@ class Parser:
 
         # Save to a CSV file
         df_beers.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
+
+    ########################################################################################
+    ##                                                                                    ##
+    ##                   Parse the beer files to get some information                     ##
+    ##                                                                                    ##
+    ########################################################################################
+
+    def parse_beer_files_for_information(self):
+        """
+        STEP 7
+
+        Parse the beer files to get some information on the beers
+        """
+
+        # Load the DF
+        df = pd.read_csv(self.data_folder + 'parsed/beers.csv')
+
+        nbr_ratings = []
+        overall_score = []
+        style_score = []
+        avg = []
+
+        for i in df.index:
+            row = df.ix[i]
+
+            file = self.data_folder + 'beers/{}/{}/1.html'.format(row['brewery_id'], row['beer_id'])
+
+            # Open the file
+            html_txt = open(file, 'rb').read().decode('ISO-8859-1')
+
+            # Unescape the HTML characters
+            html_txt = html.unescape(html_txt)
+
+            # Find number of ratings
+            str_ = 'RATINGS: </abbr><big style="color: #777;"><b><span id="_ratingCount8" itemprop="ratingCount" itemprop="reviewCount">(\d+)</span>'
+            grp = re.search(str_, html_txt)
+
+            nbr = int(grp.group(1))
+
+            nbr_ratings.append(nbr)
+
+            if nbr == 0:
+                overall_score.append(np.nan)
+                style_score.append(np.nan)
+                avg.append(np.nan)
+            else:
+                # Find the weighted average
+                str_ = 'WEIGHTED AVG: <big style="color: #777;"><strong><span itemprop="ratingValue">(.+?)</span>'
+                grp = re.search(str_, html_txt)
+
+                try:
+                    avg_val = float(grp.group(1))
+
+                    avg.append(avg_val)
+
+                    if nbr < 10:
+                        overall_score.append(np.nan)
+                        style_score.append(np.nan)
+                    else:
+                        # Find the overall score
+                        str_ = 'overall</div><div class="ratingValue" itemprop="ratingValue">(\d+)</div>'
+                        grp = re.search(str_, html_txt)
+
+                        overall = int(grp.group(1))
+
+                        overall_score.append(overall)
+
+                        # Find the style score
+                        str_ = '<div style="font-size: 25px; font-weight: bold; color: #fff; padding: 20px 0px; ">' \
+                               '(\d+)<br><div class="style-text">style</div>'
+                        grp = re.search(str_, html_txt)
+
+                        style = int(grp.group(1))
+
+                        style_score.append(style)
+
+                except ValueError:
+                    overall_score.append(np.nan)
+                    style_score.append(np.nan)
+                    avg.append(np.nan)
+
+        # Add the new columns
+        df.loc[:, 'nbr_ratings'] = nbr_ratings
+        df.loc[:, 'overall_score'] = overall_score
+        df.loc[:, 'style_score'] = style_score
+        df.loc[:, 'avg'] = avg
+
+        # Delete the column with the links
+        df = df.drop(['link'], 1)
+
+        # Save it again
+        df.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
+
 
 
 

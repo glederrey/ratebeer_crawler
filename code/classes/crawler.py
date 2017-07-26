@@ -160,6 +160,8 @@ class Crawler:
         # Read the CSV file
         df = pd.read_csv(self.data_folder + 'parsed/beers.csv')
 
+        df = df[:1000]
+
         folder = self.data_folder + 'beers/'
         # Create folder for all the HTML pages
         if not os.path.exists(folder):
@@ -194,8 +196,6 @@ class Crawler:
                 str_ = 'RATINGS: </abbr><big style="color: #777;"><b><span id="_ratingCount8" itemprop="ratingCount" ' \
                        'itemprop="reviewCount">(\d+)</span>'
                 grp = re.search(str_, str(html_txt))
-
-                nbr2 = int(grp.group(1))
 
                 if grp is not None:
                     nbr = round_(int(grp.group(1).replace(',', '')) - 1, step)
