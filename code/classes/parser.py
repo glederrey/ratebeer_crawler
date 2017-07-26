@@ -127,8 +127,6 @@ class Parser:
         # Load the DF
         df = pd.read_csv(self.data_folder + 'parsed/breweries.csv')
 
-        df = df[:3565]
-
         folder = self.data_folder + 'breweries/'
 
         # Prepare the json for the DF
