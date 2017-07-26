@@ -5,10 +5,12 @@
 #
 # Distributed under terms of the MIT license.
 
-import multiprocessing as mp
 import pandas as pd
 import numpy as np
+import datetime
+import time
 import html
+import gzip
 import re
 import os
 
@@ -18,7 +20,7 @@ class Parser:
     Parser for BeerAdvocate website
     """
 
-    def __init__(self, nbr_threads=None, data_folder=None):
+    def __init__(self, data_folder=None):
         """
         Initialize the class
 
@@ -30,11 +32,6 @@ class Parser:
             self.data_folder = '../data/'
         else:
             self.data_folder = data_folder
-
-        if nbr_threads is None:
-            self.threads = mp.cpu_count()
-        else:
-            self.threads = nbr_threads
 
         self.special_places = ['United States', 'Canada', 'England', 'Germany']
         self.codes = {213: 'United_States', 39: 'Canada', 240: 'England', 79: 'Germany'}
@@ -204,9 +201,11 @@ class Parser:
 
     def parse_beer_files_for_information(self):
         """
-        STEP 7
+        STEP 6
 
         Parse the beer files to get some information on the beers
+
+        !!! Make sure step 5 was done with the crawler !!!
         """
 
         # Load the DF
@@ -216,6 +215,7 @@ class Parser:
         overall_score = []
         style_score = []
         avg = []
+        abv = []
 
         for i in df.index:
             row = df.ix[i]
@@ -229,12 +229,25 @@ class Parser:
             html_txt = html.unescape(html_txt)
 
             # Find number of ratings
-            str_ = 'RATINGS: </abbr><big style="color: #777;"><b><span id="_ratingCount8" itemprop="ratingCount" itemprop="reviewCount">(\d+)</span>'
+            str_ = 'RATINGS: </abbr><big style="color: #777;"><b><span id="_ratingCount8" itemprop="ratingCount" ' \
+                   'itemprop="reviewCount">(\d+)</span>'
             grp = re.search(str_, html_txt)
 
             nbr = int(grp.group(1))
 
             nbr_ratings.append(nbr)
+
+            # Find the ABV
+            str_ = '<abbr title="Alcohol By Volume">ABV</abbr>: <big style="color: #777;"><strong>(.+?)</strong></big>'
+
+            grp = re.search(str_, html_txt)
+
+            try:
+                abv_val = float(grp.group(1).replace('%', ''))
+            except ValueError:
+                abv_val = np.nan
+
+            abv.append(abv_val)
 
             if nbr == 0:
                 overall_score.append(np.nan)
@@ -281,6 +294,7 @@ class Parser:
         df.loc[:, 'overall_score'] = overall_score
         df.loc[:, 'style_score'] = style_score
         df.loc[:, 'avg'] = avg
+        df.loc[:, 'abv'] = abv
 
         # Delete the column with the links
         df = df.drop(['link'], 1)
@@ -288,6 +302,114 @@ class Parser:
         # Save it again
         df.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
 
+    ########################################################################################
+    ##                                                                                    ##
+    ##                      Parse the beer files to get the reviews                       ##
+    ##                                                                                    ##
+    ########################################################################################
 
+    def parse_beer_files_for_reviews(self):
+        """
+        STEP 7
 
+        Parse the beer files to get some information on the beers
+        """
 
+        # Load the DF
+        df = pd.read_csv(self.data_folder + 'parsed/beers2.csv')
+
+        # Open the GZIP file
+        f = gzip.open(self.data_folder + 'parsed/ratings.txt.gz', 'wb')
+        # Go through all beers
+        for i in df.index:
+            row = df.ix[i]
+
+            # Check that this beer has at least 1 rating
+            if row['nbr_ratings'] > 0:
+
+                folder = self.data_folder + 'beers/{}/{}/'.format(row['brewery_id'], row['beer_id'])
+
+                list_ = os.listdir(folder)
+                list_.sort()
+
+                for file in list_:
+                    # Open the file
+                    html_txt = open(folder + file, 'rb').read().decode('ISO-8859-1')
+
+                    # Unescape the HTML characters
+                    html_txt = html.unescape(html_txt)
+
+                    # Remove the \n, \r and \t characters
+                    html_txt = html_txt.replace('\r', '').replace('\n', '').replace('\t', '')
+
+                    # Search for all the elements
+                    str_ = '<div style="display:inline; padding: 0px 0px; font-size: 24px; font-weight: bold; color: ' \
+                           '#036;" title="(.+?) out of 5.0<br /><small>Aroma (\d+)/10<br />Appearance (\d+)/5<br />' \
+                           'Taste (\d+)/10<br />Palate (\d+)/5<br />Overall (\d+)/20<br /></small>">(.+?)</div></div>' \
+                           '<small style="color: #666666; font-size: 12px; font-weight: bold;"><A HREF="/user/(\d+)/">' \
+                           '(.+?)\xa0\((\d+)\)</A></I> -(.+?)- (.+?)</small><BR><div style="padding: 20px 10px 20px ' \
+                           '0px; border-bottom: 1px solid #e0e0e0; line-height: 1.5;">(.+?)</div><br>'
+
+                    grp = re.finditer(str_, html_txt)
+
+                    for g in grp:
+                        rating = float(g.group(1))
+
+                        appearance = int(g.group(3))
+                        aroma = int(g.group(2))
+                        palate = int(g.group(5))
+                        taste = int(g.group(4))
+                        overall = int(g.group(6))
+
+                        user_name = g.group(9)
+                        user_id = int(g.group(8))
+
+                        text = g.group(13)
+
+                        if 'UPDATED' in text:
+                            # Update the date
+                            str_ = '<small style="color: #666666">UPDATED: (.+?)</i></small> (.+)'
+                            grp_txt = re.search(str_, text)
+
+                            str_date = grp_txt.group(1)
+                            text = grp_txt.group(2)
+
+                        else:
+                            str_date = g.group(12)
+
+                            # Sometimes, the user will add a second position (or a job, not sure)
+                            # Therefore, we simply split the str_date
+                            str_date = str_date.split(' - ')[-1]
+
+                        try:
+                            year = int(str_date.split(",")[1])
+                        except ValueError:
+                            # It's possible that there's an error due to the addition of the explanation
+                            # why this rating doesn't count
+                            year = int(str_date.split(",")[1].split('<')[0])
+
+                        month = time.strptime(str_date[0:3], '%b').tm_mon
+                        day = int(str_date.split(",")[0][4:])
+
+                        date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+
+                        # Write to file
+                        f.write('beer_name: {}\n'.format(row['beer_name']).encode('utf-8'))
+                        f.write('beer_id: {:d}\n'.format(row['beer_id']).encode('utf-8'))
+                        f.write('brewery_name: {}\n'.format(row['brewery_name']).encode('utf-8'))
+                        f.write('brewery_id: {:d}\n'.format(row['brewery_id']).encode('utf-8'))
+                        f.write('style: {}\n'.format(row['style']).encode('utf-8'))
+                        f.write('abv: {}\n'.format(row['abv']).encode('utf-8'))
+                        f.write('date: {:d}\n'.format(date).encode('utf-8'))
+                        f.write('user_name: {}\n'.format(user_name).encode('utf-8'))
+                        f.write('user_id: {:d}\n'.format(user_id).encode('utf-8'))
+                        f.write('appearance: {:d}\n'.format(appearance).encode('utf-8'))
+                        f.write('aroma: {:d}\n'.format(aroma).encode('utf-8'))
+                        f.write('palate: {:d}\n'.format(palate).encode('utf-8'))
+                        f.write('taste: {:d}\n'.format(taste).encode('utf-8'))
+                        f.write('overall: {:d}\n'.format(overall).encode('utf-8'))
+                        f.write('rating: {:.2f}\n'.format(rating).encode('utf-8'))
+                        f.write('review: {}\n'.format(text).encode('utf-8'))
+                        f.write('\n'.encode('utf-8'))
+
+        f.close()

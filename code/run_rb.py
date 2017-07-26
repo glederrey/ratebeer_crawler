@@ -26,14 +26,13 @@ def run():
     # Initialize classes
     delta_t = 0.2
     crawler = Crawler(delta_t, data_folder)
-    nbr_threads = 10
-    parser = Parser(nbr_threads, data_folder)
+    parser = Parser(data_folder)
 
     print('1. Crawling all the places...')
     #crawler.crawl_all_places()
 
     print('2. Parsing the breweries from the places...')
-    parser.parse_breweries_from_places()
+    #parser.parse_breweries_from_places()
 
     print('3. Crawling all the breweries...')
     #crawler.crawl_all_breweries()
@@ -43,6 +42,12 @@ def run():
 
     print('5. Crawling all the beers and their reviews...')
     #crawler.crawl_all_beers_and_reviews()
+
+    print('6. Parsing all the beer files to update the beers.csv file...')
+    parser.parse_beer_files_for_information()
+
+    print('7. Parsing all the beer files to get the reviews...')
+    parser.parse_beer_files_for_reviews()
 
 
 if __name__ == "__main__":
