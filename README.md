@@ -29,25 +29,25 @@ The collection of ratings are in the file *ratings.txt.gz* in the folder `parsed
 example in python how to parse this file called [example_parser](./code/example_parser.py). The function parse (that you can reuse) is creating an iterator from the 
 file. Then, you will go through each item (being a full rating). Each item can be treated as a dict or a JSON. Here is 
 the list of key-value pairs with their type (that you have to change):
-* **beer_name** (str): Name of the beer
-* **beer_id** (int): ID of the beer
-* **brewery_name** (str): Name of the brewery
-* **brewery_id** (int): ID of the brewery
-* **style** (str): Style of the beer
-* **abv** (float): ABV (Alcohol By Volume) in percentage
-* **user_name** (str): Name of the user
-* **user_id** (int): ID of the user
-* **appearance** (int): Rating for the appearance (!! on a 5 points scale !!)
-* **aroma** (int): Rating for the aroma (!! on a 10 points scale !!)
-* **palate** (int): Rating for the palate (!! on a 5 points scale !!)
-* **taste** (int): Rating for the taste (!! on a 10 points scale !!)
-* **overall** (int): Rating for the overall (!! on a 20 points scale !!)
-* **rating** (float): Final rating (!! Continuous value between 1 and 5 !!)
-* **review** (str): Text of the rating
-* **date** (int): Date of the review in UNIX Epoch
 
-For the date, we don't have access to the hour when the rating was posted. Therefore, when transforming the date in the 
-UNIX Epoch format, we gave the time of the review being 12:00 pm (noon).
+| Keys             | Type  | Description                           | **Warning**                                           |
+| :--------------- | :---- | :------------------------------------ | :---------------------------------------------------- |
+| **beer_name**    | str   | Name of the beer                      |                                                       |
+| **beer_id**      | int   | ID of the beer                        |                                                       |
+| **brewery_name** | str   | Name of the brewery                   |                                                       |
+| **brewery_id**   | int   | ID of the brewery                     |                                                       |
+| **style**        | str   | Style of the beer                     |                                                       |
+| **abv**          | float | ABV (Alcohol By Volume) in percentage |                                                       |
+| **user_name**    | str   | Name of the user                      |                                                       |
+| **user_id**      | int   | ID of the user                        |                                                       |
+| **appearance**   | int   | Rating for appearance                 | On a 5 points scale                                   |
+| **aroma**        | int   | Rating for aroma                      | On a 10 points scale                                  |
+| **palate**       | int   | Rating for palate                     | On a 5 points scale                                   |
+| **taste**        | int   | Rating for taste                      | On a 10 points scale                                  |
+| **overall**      | int   | Rating for overall                    | On a 20 points scale                                  |
+| **rating**       | float | Final rating                          |                                                       |
+| **review**       | str   | Text of the rating                    |                                                       |
+| **date**         | int   | Date of the review in UNIX Epoch      | No access to time of the day. => Time is always noon. |
 
 ## Link to the crawled data
 
