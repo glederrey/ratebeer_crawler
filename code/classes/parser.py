@@ -409,7 +409,7 @@ class Parser:
                         f.write('taste: {:d}\n'.format(taste).encode('utf-8'))
                         f.write('overall: {:d}\n'.format(overall).encode('utf-8'))
                         f.write('rating: {:.2f}\n'.format(rating).encode('utf-8'))
-                        f.write('review: {}\n'.format(text).encode('utf-8'))
+                        f.write('text: {}\n'.format(text).encode('utf-8'))
                         f.write('\n'.encode('utf-8'))
 
         f.close()
