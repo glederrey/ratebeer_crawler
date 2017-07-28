@@ -5,6 +5,7 @@
 #
 # Distributed under terms of the MIT license.
 
+from classes.helpers import parse
 import pandas as pd
 import numpy as np
 import datetime
@@ -24,7 +25,6 @@ class Parser:
         """
         Initialize the class
 
-        :param nbr_threads: Number of threads you want to give. If not given, then it will use all the possible ones.
         :param data_folder: Folder to save the data
         """
 
@@ -44,6 +44,14 @@ class Parser:
                                   'St Vincent & The Grenadines': 'Saint Vincent and The Grenadines',
                                   'São Tomé & Principe': 'Sao Tome and Principe',
                                   'Senegal Republic': 'Senegal'}
+
+        self.us_states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                          'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansa',
+                          'Kentucky', 'Louisiana', 'Main', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+                          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+                          'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+                          'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
+                          'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
 
     ########################################################################################
     ##                                                                                    ##
@@ -426,3 +434,152 @@ class Parser:
 
         # Save the CSV again
         df.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
+
+    ########################################################################################
+    ##                                                                                    ##
+    ##                           Get the users from the ratings                           ##
+    ##                                                                                    ##
+    ########################################################################################
+
+    def get_users_from_ratings(self):
+        """
+        STEP 8
+
+        Go through the file ratings.txt.gz and get all the users who have rated the beers
+        """
+
+        # Load the file ratings.txt.gz in the data/parsed folder
+        iterator = parse(self.data_folder + 'parsed/ratings.txt.gz')
+
+        users = {}
+
+        # Go through the elements in the iterator
+        for item in iterator:
+            # Get the user name
+            user_name = item['user_name']
+
+            # Check if it's in the JSON for the users
+            if user_name not in users.keys():
+                users[user_name] = {'user_id': item['user_id'], 'nbr_ratings': 1}
+            else:
+                # And update the number of ratings
+                users[user_name]['nbr_ratings'] += 1
+
+        # Prepare the JSON DataFrame
+        json_df = {'user_name': [], 'nbr_ratings': [], 'user_id': []}
+        for key in users.keys():
+            json_df['user_name'].append(key)
+            json_df['nbr_ratings'].append(users[key]['nbr_ratings'])
+            json_df['user_id'].append(users[key]['user_id'])
+
+        # Transform it into a DF
+        df = pd.DataFrame(json_df)
+
+        # Save the CSV
+        df.to_csv(self.data_folder + 'parsed/users.csv', index=False)
+
+    ########################################################################################
+    ##                                                                                    ##
+    ##                     Parse the user page to get some information                    ##
+    ##                                                                                    ##
+    ########################################################################################
+
+    def crawl_all_users(self):
+        """
+        STEP 10
+
+        Crawl all the users who have rated the beers.
+
+        !!! Make sure step 9 was done with the crawler !!!
+        """
+
+        # Load the DF of users
+        df = pd.read_csv(self.data_folder + 'parsed/users.csv')
+
+        location = []
+        joined = []
+
+        folder = self.data_folder + 'users/'
+
+        for i in df.index:
+            row = df.ix[i]
+
+            file = str(row['user_id']) + '.html'
+
+            # Open the file
+            html_txt = open(folder + file, 'rb').read().decode('ISO-8859-1')
+
+            # Unescape the HTML characters
+            html_txt = html.unescape(html_txt)
+
+            # Get the joining date
+            str_ = 'Member since ([^<]*)'
+
+            grp = re.search(str_, html_txt)
+            str_date = grp.group(1)
+
+            # Transform string to epoch
+            month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
+            day = int(str_date.split(' ')[1])
+            year = int(str_date.split(' ')[2])
+            date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+
+            joined.append(date)
+
+            # Get the location
+            str_ = '<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> ([^<]*)'
+            grp = re.search(str_, html_txt)
+            place = grp.group(1).replace('\n', '').replace('\r', '').replace('\t', '')
+
+            try:
+                # Remove the space at the end of the string
+                while place[-1] == ' ':
+                    place = place[:-1]
+
+                arr = place.split(', ')
+
+                if len(arr) == 1:
+                    place = arr[0]  # .replace(',', '')
+                else:
+                    place = arr[-1]
+
+                if place in self.us_states:
+                    place = 'United States, ' + place
+
+                # Manual fixing
+                if place == 'Wauwatosa,':
+                    place = 'United States, Wisconsin'
+
+                if place == 'coventry,' or place == 'Durham,':
+                    place = 'England'
+
+                if place == 'Compostela (Galiza),':
+                    place = 'Spain'
+
+                if place == 'Beckley,':
+                    place = 'United States, West Virginia'
+
+                if place == 'Berlin,':
+                    place = 'Germany'
+
+                if place == 'Australia,':
+                    place = 'Australia'
+
+                if place == 'East Lansing,':
+                    place = 'United States, Michigan'
+
+                if place == 'Virginia Beach,':
+                    place = ' United States, Virginia'
+
+                ### TO CONTINUE WITH ALL USERS ###
+
+            except IndexError:
+                place = np.nan
+
+            location.append(place)
+
+        df.loc[:, 'joined'] = joined
+        df.loc[:, 'location'] = location
+
+        # Save the CSV again
+        df.to_csv(self.data_folder + 'parsed/users.csv', index=False)

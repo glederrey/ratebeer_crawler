@@ -21,7 +21,7 @@ After running the code, you will get a folder called `data` with several sub-fol
  from all the breweries. Inside the breweries folders, you will find the folders for all the beers 
  from this given brewery. Inside the beers folders, you will find the HTML pages with all the reviews.
 - `parsed` **contains all the parsed data**. In particular, it contains the files: 
- *breweries.csv*, *beers.csv* and *ratings.txt.gz*. (MORE TO COME)
+ *breweries.csv*, *beers.csv*, *users.csv*, and *ratings.txt.gz*.
  
 ## Ratings
 
@@ -63,6 +63,9 @@ create a CSV file (*beers.csv*)
 5. **Crawl** all the beers and their reviews
 6. **Parse** all the beers to add some information in the CSV file (*beers.csv*)
 7. **Parse** all the beers to get all the reviews and save them in a gzip file (*ratings.txt.gz*)
+8. **Get** the users from the file (*ratings.txt.gz*) and save them in the CSV file (*users.csv*)
+9. **Crawl** all the users 
+10. **Parse** all the users to get some information and update the CSV (*users.csv*)
 
 ## Dates and Time when the data were crawled
 

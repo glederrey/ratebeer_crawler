@@ -6,6 +6,7 @@
 # Distributed under terms of the MIT license.
 
 import numpy as np
+import gzip
 
 
 def round_(x, base=50):

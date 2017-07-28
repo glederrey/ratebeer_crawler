@@ -221,6 +221,42 @@ class Crawler:
 
     ########################################################################################
     ##                                                                                    ##
+    ##                              Crawl all the users                                   ##
+    ##                                                                                    ##
+    ########################################################################################
+
+    def crawl_all_users(self):
+        """
+        STEP 9
+
+        Crawl all the users who have rated the beers.
+
+        !!! Make sure steps 6, 7 ,and 8 were done with the parser !!!
+        """
+
+        # Load the DF of users
+        df = pd.read_csv(self.data_folder + 'parsed/users.csv')
+
+        # Create folder for all the HTML pages
+        folder = self.data_folder + 'users/'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        for i in df.index:
+            row = df.ix[i]
+
+            # Get the url
+            url = 'https://www.ratebeer.com/user/{}/'.format(row['user_id'])
+
+            # Crawl the user's page
+            r = self.request_and_wait(url)
+
+            # Save it
+            with open(folder + str(row['user_id']) + '.html', 'wb') as output:
+                output.write(r.content)
+
+    ########################################################################################
+    ##                                                                                    ##
     ##                                Other functions                                     ##
     ##                                                                                    ##
     ########################################################################################
