@@ -63,7 +63,7 @@ create a CSV file (*beers.csv*)
 5. **Crawl** all the beers and their reviews
 6. **Parse** all the beers to add some information in the CSV file (*beers.csv*)
 7. **Parse** all the beers to get all the reviews and save them in a gzip file (*ratings.txt.gz*)
-8. **Get** the users from the file (*ratings.txt.gz*) and save them in the CSV file (*users.csv*)
+8. Get (**Parse**) the users from the file (*ratings.txt.gz*) and save them in the CSV file (*users.csv*)
 9. **Crawl** all the users 
 10. **Parse** all the users to get some information and update the CSV (*users.csv*)
 
