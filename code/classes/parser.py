@@ -417,10 +417,10 @@ class Parser:
                         f.write('text: {}\n'.format(text).encode('utf-8'))
                         f.write('\n'.encode('utf-8'))
 
-                if count < nbr_rat:
-                    # If there's a problem in the HTML file, we replace the count of ratings
-                    # with the number we have now.
-                    df = df.set_value(i, 'nbr_ratings', count)
+            if count < nbr_rat:
+                # If there's a problem in the HTML file, we replace the count of ratings
+                # with the number we have now.
+                df = df.set_value(i, 'nbr_ratings', count)
 
         f.close()
 
