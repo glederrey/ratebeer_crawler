@@ -46,7 +46,7 @@ the list of key-value pairs with their type (that you have to change):
 | **taste**        | int   | Rating for taste                      | On a 10 points scale                                  |
 | **overall**      | int   | Rating for overall                    | On a 20 points scale                                  |
 | **rating**       | float | Final rating                          |                                                       |
-| **review**       | str   | Text of the rating                    |                                                       |
+| **text**         | str   | Text of the rating                    |                                                       |
 | **date**         | int   | Date of the review in UNIX Epoch      | No access to time of the day. => Time is always noon. |
 
 ## Link to the crawled data
@@ -61,6 +61,8 @@ the list of key-value pairs with their type (that you have to change):
 4. **Parse** all the breweries to add the number of beers to the CSV file (*breweries.csv*) and to get the beers and 
 create a CSV file (*beers.csv*)
 5. **Crawl** all the beers and their reviews
+6. **Parse** all the beers to add some information in the CSV file (*beers.csv*)
+7. **Parse** all the beers to get all the reviews and save them in a gzip file (*ratings.txt.gz*)
 
 ## Dates and Time when the data were crawled
 

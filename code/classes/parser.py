@@ -316,13 +316,16 @@ class Parser:
         """
 
         # Load the DF
-        df = pd.read_csv(self.data_folder + 'parsed/beers2.csv')
+        df = pd.read_csv(self.data_folder + 'parsed/beers.csv')
 
         # Open the GZIP file
         f = gzip.open(self.data_folder + 'parsed/ratings.txt.gz', 'wb')
         # Go through all beers
         for i in df.index:
             row = df.ix[i]
+
+            nbr_rat = row['nbr_ratings']
+            count = 0
 
             # Check that this beer has at least 1 rating
             if row['nbr_ratings'] > 0:
@@ -333,6 +336,7 @@ class Parser:
                 list_.sort()
 
                 for file in list_:
+
                     # Open the file
                     html_txt = open(folder + file, 'rb').read().decode('ISO-8859-1')
 
@@ -353,6 +357,7 @@ class Parser:
                     grp = re.finditer(str_, html_txt)
 
                     for g in grp:
+                        count += 1
                         rating = float(g.group(1))
 
                         appearance = int(g.group(3))
@@ -412,4 +417,12 @@ class Parser:
                         f.write('text: {}\n'.format(text).encode('utf-8'))
                         f.write('\n'.encode('utf-8'))
 
+                if count < nbr_rat:
+                    # If there's a problem in the HTML file, we replace the count of ratings
+                    # with the number we have now.
+                    df = df.set_value(i, 'nbr_ratings', count)
+
         f.close()
+
+        # Save the CSV again
+        df.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
