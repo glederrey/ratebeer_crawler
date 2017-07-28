@@ -484,11 +484,11 @@ class Parser:
     ##                                                                                    ##
     ########################################################################################
 
-    def crawl_all_users(self):
+    def parse_all_users(self):
         """
         STEP 10
 
-        Crawl all the users who have rated the beers.
+        Parse all the users to get some information
 
         !!! Make sure step 9 was done with the crawler !!!
         """
