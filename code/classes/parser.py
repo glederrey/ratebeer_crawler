@@ -46,8 +46,8 @@ class Parser:
                                   'Senegal Republic': 'Senegal'}
 
         self.us_states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-                          'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansa',
-                          'Kentucky', 'Louisiana', 'Main', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+                          'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
+                          'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
                           'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
                           'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
                           'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
@@ -572,6 +572,10 @@ class Parser:
                     place = ' United States, Virginia'
 
                 ### TO CONTINUE WITH ALL USERS ###
+
+                # Change to conventional name
+                if place in self.country_to_change.keys():
+                    place = self.country_to_change[place]
 
             except IndexError:
                 place = np.nan

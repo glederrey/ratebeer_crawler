@@ -73,7 +73,6 @@ Everything has been crawled at the same time. It started the 21st of July at XX 
 
 ## Required packages
 
-* `multiprocessing`
 * `requests`
 * `pandas`
 * `numpy`
