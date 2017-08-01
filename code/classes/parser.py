@@ -268,34 +268,37 @@ class Parser:
 
                 try:
                     avg_val = float(grp.group(1))
+                except (ValueError, AttributeError):
+                    avg_val = np.nan
 
-                    avg.append(avg_val)
+                avg.append(avg_val)
 
-                    if nbr < 10:
-                        overall_score.append(np.nan)
-                        style_score.append(np.nan)
-                    else:
-                        # Find the overall score
-                        str_ = 'overall</div><div class="ratingValue" itemprop="ratingValue">(\d+)</div>'
-                        grp = re.search(str_, html_txt)
-
-                        overall = int(grp.group(1))
-
-                        overall_score.append(overall)
-
-                        # Find the style score
-                        str_ = '<div style="font-size: 25px; font-weight: bold; color: #fff; padding: 20px 0px; ">' \
-                               '(\d+)<br><div class="style-text">style</div>'
-                        grp = re.search(str_, html_txt)
-
-                        style = int(grp.group(1))
-
-                        style_score.append(style)
-
-                except ValueError:
+                if nbr < 10:
                     overall_score.append(np.nan)
                     style_score.append(np.nan)
-                    avg.append(np.nan)
+                else:
+                    # Find the overall score
+                    str_ = 'overall</div><div class="ratingValue" itemprop="ratingValue">(\d+)</div>'
+                    grp = re.search(str_, html_txt)
+
+                    try:
+                        overall = int(grp.group(1))
+                    except (ValueError, AttributeError):
+                        overall = np.nan
+
+                    overall_score.append(overall)
+
+                    # Find the style score
+                    str_ = '<div style="font-size: 25px; font-weight: bold; color: #fff; padding: 20px 0px; ">' \
+                           '(\d+)<br><div class="style-text">style</div>'
+                    grp = re.search(str_, html_txt)
+
+                    try:
+                        style = int(grp.group(1))
+                    except (ValueError, AttributeError):
+                        style = np.nan
+
+                    style_score.append(style)
 
         # Add the new columns
         df.loc[:, 'nbr_ratings'] = nbr_ratings
