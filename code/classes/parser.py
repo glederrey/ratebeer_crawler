@@ -240,8 +240,11 @@ class Parser:
             str_ = 'RATINGS: </abbr><big style="color: #777;"><b><span id="_ratingCount8" itemprop="ratingCount" ' \
                    'itemprop="reviewCount">(\d+)</span>'
             grp = re.search(str_, html_txt)
-
-            nbr = int(grp.group(1))
+            
+            try:
+                nbr = int(grp.group(1))
+            except AttributeError:
+                nbr = -1
 
             nbr_ratings.append(nbr)
 
@@ -309,6 +312,9 @@ class Parser:
 
         # Delete the column with the links
         df = df.drop(['link'], 1)
+
+        # Delete columns with -1 as nbr of ratings
+        df = df[df['nbr_ratings'] > -1]
 
         # Save it again
         df.to_csv(self.data_folder + 'parsed/beers.csv', index=False)
