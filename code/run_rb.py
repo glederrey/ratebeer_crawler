@@ -47,7 +47,13 @@ def run():
     parser.parse_beer_files_for_information()
 
     print('7. Parsing all the beer files to get the reviews...')
-    parser.parse_beer_files_for_reviews()
+    #parser.parse_beer_files_for_reviews()
+
+    stop = time.time()
+
+    elapsed = str(datetime.timedelta(seconds=stop-start))
+
+    print('Time to complete the crawling: {}'.format(elapsed))
 
 
 if __name__ == "__main__":
