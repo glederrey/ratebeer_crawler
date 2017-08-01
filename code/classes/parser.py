@@ -405,7 +405,8 @@ class Parser:
 
                         try:
                             year = int(str_date.split(",")[1])
-                        except (ValueError, AttributeError):
+                        except (ValueError, IndexError):
+                            print(str_date, folder, file)
                             # It's possible that there's an error due to the addition of the explanation
                             # why this rating doesn't count
                             year = int(str_date.split(",")[1].split('<')[0])
