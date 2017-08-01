@@ -365,7 +365,7 @@ class Parser:
 
                     # Search for all the elements
                     str_ = '<div style="display:inline; padding: 0px 0px; font-size: 24px; font-weight: bold; color: ' \
-                           '#036;" title="(.+?) out of 5.0<br /><small>Aroma (\d+)/10<br />Appearance (\d+)/5<br />' \
+                           '#036;" title="(^[o]*) out of 5.0<br /><small>Aroma (\d+)/10<br />Appearance (\d+)/5<br />' \
                            'Taste (\d+)/10<br />Palate (\d+)/5<br />Overall (\d+)/20<br /></small>">(.+?)</div></div>' \
                            '<small style="color: #666666; font-size: 12px; font-weight: bold;"><A HREF="/user/(\d+)/">' \
                            '(.+?)\xa0\((\d+)\)</A></I> -(.+?)- (.+?)</small><BR><div style="padding: 20px 10px 20px ' \
