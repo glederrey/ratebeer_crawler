@@ -252,7 +252,7 @@ class Parser:
 
             try:
                 abv_val = float(grp.group(1).replace('%', ''))
-            except ValueError:
+            except (ValueError, AttributeError):
                 abv_val = np.nan
 
             abv.append(abv_val)
