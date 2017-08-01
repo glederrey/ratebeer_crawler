@@ -401,7 +401,14 @@ class Parser:
 
                             # Sometimes, the user will add a second position (or a job, not sure)
                             # Therefore, we simply split the str_date
-                            str_date = str_date.split(' - ')[-1]
+                            splitted = str_date.split(' - ')
+
+                            idx = 1
+
+                            while not ('20' in splitted[-idx] or '19' in splitted[-idx]):
+                                idx += 1
+
+                            str_date = splitted[-idx]
 
                         try:
                             year = int(str_date.split(",")[1])
