@@ -175,17 +175,42 @@ class Crawler:
             brewery_id = row['brewery_id']
             beer_id = row['beer_id']
 
-            try:
-                # Create the folder
-                folder = self.data_folder + 'beers/{:d}/{:d}/'.format(brewery_id, beer_id)
-                if not os.path.exists(folder):
-                    os.makedirs(folder)
+            # Create the folder
+            folder = self.data_folder + 'beers/{:d}/{:d}/'.format(brewery_id, beer_id)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
 
-                if not os.path.exists(folder + '1.html'):
-                    # Get it and write it
-                    r = self.request_and_wait(row['link'])
-                    with open(folder + '1.html', 'wb') as output:
-                        output.write(r.content)
+            if not os.path.exists(folder + '1.html') or os.stat(folder + '1.html').st_size == 0:
+
+                count = 0
+                code = 400
+
+                try:
+                    while code != 200:
+                        # Get it and write it
+                        r = self.request_and_wait(row['link'])
+
+                        code = r.status_code
+                        count += 1
+
+                        if r.content == '':
+                            code = 400
+
+                        if count == 5:
+                            raise Exception('Problem downloading file 1.html for '
+                                            'brewery_id {} and beer_id {} ( rm -r {}/{}) '.format(brewery_id, beer_id,
+                                                                                                  brewery_id, beer_id))
+
+                except Exception as e:
+                    print('---------------------------------------------------------------------')
+                    print('')
+                    print(e)
+                    print('---------------------------------------------------------------------')
+                    print('')
+
+                # Save it
+                with open(folder + '1.html', 'wb') as output:
+                    output.write(r.content)
 
                 html_txt = open(folder + '1.html', 'rb').read().decode('ISO-8859-1')
 
@@ -197,27 +222,57 @@ class Crawler:
                        'itemprop="reviewCount">(\d+)</span>'
                 grp = re.search(str_, str(html_txt))
 
-                if grp is not None:
-                    nbr = round_(int(grp.group(1).replace(',', '')) - 1, step)
+                try:
+                    grp.group(1)
+                except Exception as e:
+                    print('---------------------------------------------------------------------')
+                    print('')
+                    print('Cannot read file 1.html for brewery_id {} and beer_id {} '
+                          '( rm -r {}/{}) '.format(brewery_id, beer_id, brewery_id, beer_id))
+                    print('---------------------------------------------------------------------')
+                    print('')
 
-                    # Get all the pages with the reviews and ratings
-                    for i in range(1, int(nbr / step) + 1):
-                        idx = i + 1
-                        if not os.path.exists(folder + str(idx) + '.html'):
-                            url = row['link'] + '/1/{}/'.format(idx)
+                nbr = round_(int(grp.group(1).replace(',', '')) - 1, step)
 
-                            r = self.request_and_wait(url)
+                # Get all the pages with the reviews and ratings
+                for i in range(1, int(nbr / step) + 1):
+                    idx = i + 1
+                    if not os.path.exists(folder + str(idx) + '.html') or \
+                                    os.stat(folder + str(idx) + '.html').st_size == 0:
+                        url = row['link'] + '/1/{}/'.format(idx)
 
-                            with open(folder + str(idx) + '.html', 'wb') as output:
-                                output.write(r.content)
-            except Exception as e:
-                print('---------------------------------------------------------------------')
-                print('')
-                print('ERROR WITH BREWERY_ID {} AND BEER_ID {}'.format(brewery_id, beer_id))
-                print(e)
-                print('---------------------------------------------------------------------')
-                print('')
-                pass
+                        # Download the file
+                        count = 0
+                        code = 400
+
+                        try:
+                            while code != 200:
+                                # Get it and write it
+                                r = self.request_and_wait(url)
+
+                                code = r.status_code
+                                count += 1
+
+                                if r.content == '':
+                                    code = 400
+
+                                if count == 5:
+                                    raise Exception('Problem downloading file {}.html for '
+                                                    'brewery_id {} and beer_id {} ( rm -r {}/{}) '.format(str(idx),
+                                                                                                          brewery_id,
+                                                                                                          beer_id,
+                                                                                                          brewery_id,
+                                                                                                          beer_id))
+
+                        except Exception as e:
+                            print('---------------------------------------------------------------------')
+                            print('')
+                            print(e)
+                            print('---------------------------------------------------------------------')
+                            print('')
+
+                        with open(folder + str(idx) + '.html', 'wb') as output:
+                            output.write(r.content)
 
     ########################################################################################
     ##                                                                                    ##
