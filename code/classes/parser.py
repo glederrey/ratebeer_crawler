@@ -405,7 +405,7 @@ class Parser:
 
                         try:
                             year = int(str_date.split(",")[1])
-                        except ValueError:
+                        except (ValueError, AttributeError):
                             # It's possible that there's an error due to the addition of the explanation
                             # why this rating doesn't count
                             year = int(str_date.split(",")[1].split('<')[0])
@@ -527,17 +527,11 @@ class Parser:
             grp = re.search(str_, html_txt)
             str_date = grp.group(1)
 
-            try:
-
-                # Transform string to epoch
-                month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
-                day = int(str_date.split(' ')[1])
-                year = int(str_date.split(' ')[2])
-                date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
-
-            except IndexError:
-                print(str_date, file)
-                asd
+            # Transform string to epoch
+            month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
+            day = int(str_date.split(' ')[1])
+            year = int(str_date.split(' ')[2])
+            date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
 
             joined.append(date)
 
