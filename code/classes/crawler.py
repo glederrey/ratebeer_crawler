@@ -160,8 +160,6 @@ class Crawler:
         # Read the CSV file
         df = pd.read_csv(self.data_folder + 'parsed/beers.csv')
 
-        df = df[:1000]
-
         folder = self.data_folder + 'beers/'
         # Create folder for all the HTML pages
         if not os.path.exists(folder):
