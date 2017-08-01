@@ -527,11 +527,17 @@ class Parser:
             grp = re.search(str_, html_txt)
             str_date = grp.group(1)
 
-            # Transform string to epoch
-            month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
-            day = int(str_date.split(' ')[1])
-            year = int(str_date.split(' ')[2])
-            date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+            try:
+
+                # Transform string to epoch
+                month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
+                day = int(str_date.split(' ')[1])
+                year = int(str_date.split(' ')[2])
+                date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+
+            except IndexError:
+                print(str_date, file)
+                asd
 
             joined.append(date)
 
