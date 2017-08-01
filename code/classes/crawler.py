@@ -221,7 +221,7 @@ class Crawler:
                 grp = re.search(str_, str(html_txt))
 
                 try:
-                    grp.group(1)
+                    nbr = round_(int(grp.group(1).replace(',', '')) - 1, step)
                 except Exception as e:
                     print('---------------------------------------------------------------------')
                     print('')
@@ -230,7 +230,7 @@ class Crawler:
                     print('---------------------------------------------------------------------')
                     print('')
 
-                nbr = round_(int(grp.group(1).replace(',', '')) - 1, step)
+                    nbr = 0
 
                 # Get all the pages with the reviews and ratings
                 for i in range(1, int(nbr / step) + 1):
