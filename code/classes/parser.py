@@ -388,7 +388,7 @@ class Parser:
 
                         text = g.group(13)
 
-                        if 'UPDATED' in text:
+                        if '<small style="color: #666666">UPDATED' in text:
                             # Update the date
                             str_ = '<small style="color: #666666">UPDATED: (.+?)</i></small> (.+)'
                             grp_txt = re.search(str_, text)
@@ -424,6 +424,9 @@ class Parser:
                         day = int(str_date.split(",")[0][4:])
 
                         date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+
+                        # Clean the text
+                        text = re.sub('<[^>]+>', '', text)
 
                         # Write to file
                         f.write('beer_name: {}\n'.format(row['beer_name']).encode('utf-8'))
