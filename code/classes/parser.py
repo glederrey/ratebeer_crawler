@@ -190,7 +190,7 @@ class Parser:
         df.loc[:, 'nbr_beers'] = nbr_beers
 
         # Delete the links to the breweries
-        df = df.drop(['link'], 1)
+        df = df.drop(['link'], 1, errors='ignore')
 
         # Save it again
         df.to_csv(self.data_folder + 'parsed/breweries.csv', index=False)
