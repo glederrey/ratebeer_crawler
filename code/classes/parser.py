@@ -374,7 +374,6 @@ class Parser:
                     grp = re.finditer(str_, html_txt)
 
                     for g in grp:
-                        print('AAAA')
                         count += 1
                         rating = float(g.group(1))
 
