@@ -415,7 +415,11 @@ class Parser:
                         except (ValueError, IndexError):
                             # It's possible that there's an error due to the addition of the explanation
                             # why this rating doesn't count
-                            year = int(str_date.split(",")[1].split('<')[0])
+                            try:
+                                year = int(str_date.split(",")[1].split('<')[0])
+                            except:
+                                print(folder, file, str_date)
+                                asd
 
                         month = time.strptime(str_date[0:3], '%b').tm_mon
                         day = int(str_date.split(",")[0][4:])
