@@ -393,7 +393,10 @@ class Parser:
                             str_ = '<small style="color: #666666">UPDATED: (.+?)</i></small> (.+)'
                             grp_txt = re.search(str_, text)
 
-                            str_date = grp_txt.group(1)
+                            try:
+                                str_date = grp_txt.group(1)
+                            except:
+                                print(folder, file)
                             text = grp_txt.group(2)
 
                         else:
