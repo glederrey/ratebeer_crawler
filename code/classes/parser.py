@@ -402,19 +402,26 @@ class Parser:
                         else:
                             str_date = g.group(12)
 
-                        # Split to get the year of the second part and the month and day on the first
-                        splitted = str_date.split(', ')
+                            # Sometimes, the user will add a second position (or a job, not sure)
+                            # Therefore, we simply split the str_date
+                            splitted = str_date.split(' - ')
+
+                            idx = 0
+
+                            while not (', 20' in splitted[idx] or ', 19' in splitted[idx]):
+                                idx += 1
+
+                            str_date = splitted[idx]
 
                         try:
-                            year = int(splitted[1])
-                        except ValueError:
-                            year = int(splitted[1].split('<')[0])
+                            year = int(str_date.split(",")[1])
+                        except (ValueError, IndexError):
+                            # It's possible that there's an error due to the addition of the explanation
+                            # why this rating doesn't count
+                            year = int(str_date.split(",")[1].split('<')[0])
 
-                        # Remove the str before the -
-                        month_day = splitted[0].split(' - ')[-1]
-
-                        month = time.strptime(month_day[0:3], '%b').tm_mon
-                        day = int(month_day[4:])
+                        month = time.strptime(str_date[0:3], '%b').tm_mon
+                        day = int(str_date.split(",")[0][4:])
 
                         date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
 
