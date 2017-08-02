@@ -405,7 +405,7 @@ class Parser:
 
                             idx = 1
 
-                            while not ('20' in splitted[-idx] or '19' in splitted[-idx]):
+                            while not (', 20' in splitted[-idx] or ', 19' in splitted[-idx]):
                                 idx += 1
 
                             str_date = splitted[-idx]
@@ -415,11 +415,7 @@ class Parser:
                         except (ValueError, IndexError):
                             # It's possible that there's an error due to the addition of the explanation
                             # why this rating doesn't count
-                            try:
-                                year = int(str_date.split(",")[1].split('<')[0])
-                            except:
-                                print(folder, file, str_date)
-                                asd
+                            year = int(str_date.split(",")[1].split('<')[0])
 
                         month = time.strptime(str_date[0:3], '%b').tm_mon
                         day = int(str_date.split(",")[0][4:])
