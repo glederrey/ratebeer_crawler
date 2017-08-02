@@ -311,7 +311,7 @@ class Parser:
         df.loc[:, 'abv'] = abv
 
         # Delete the column with the links
-        df = df.drop(['link'], 1)
+        df = df.drop(['link'], 1, errors='ignore')
 
         # Delete columns with -1 as nbr of ratings
         df = df[df['nbr_ratings'] > -1]
@@ -374,6 +374,7 @@ class Parser:
                     grp = re.finditer(str_, html_txt)
 
                     for g in grp:
+                        print('AAAA')
                         count += 1
                         rating = float(g.group(1))
 
