@@ -553,15 +553,14 @@ class Parser:
             grp = re.search(str_, html_txt)
             try:
                 str_date = grp.group(1)
-            except AttributeError:
-                print(file)
-                asd
 
-            # Transform string to epoch
-            month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
-            day = int(str_date.split(' ')[1])
-            year = int(str_date.split(' ')[2])
-            date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+                # Transform string to epoch
+                month = time.strptime(str_date.split(' ')[0], '%b').tm_mon
+                day = int(str_date.split(' ')[1])
+                year = int(str_date.split(' ')[2])
+                date = int(datetime.datetime(year, month, day, 12, 0).timestamp())
+            except AttributeError:
+                date = np.nan
 
             joined.append(date)
 
@@ -616,7 +615,7 @@ class Parser:
                 if place in self.country_to_change.keys():
                     place = self.country_to_change[place]
 
-            except IndexError:
+            except (AttributeError, IndexError):
                 place = np.nan
 
             location.append(place)
