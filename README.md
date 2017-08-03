@@ -53,6 +53,18 @@ the list of key-value pairs with their type (that you have to change):
 
 **TO BE UPDATED!!**
 
+## Some Numbers
+
+We give here the table with the different number of objects you can find in the parsed data, see folder `parsed`.
+
+| Elements                  | Numbers   |
+| :------------------------ | :-------- |
+| Breweries                 | 24'189    |
+| Beers                     | 460'116   |
+| Beers (at least 1 rating) | 301'049   |
+| Users                     | 70'174    |
+| Ratings                   | 7'636'401 |
+
 ## Procedure
 
 1. **Crawl** all the places (countries and regions)
@@ -67,9 +79,10 @@ create a CSV file (*beers.csv*)
 9. **Crawl** all the users 
 10. **Parse** all the users to get some information and update the CSV (*users.csv*)
 
-## Dates and Time when the data were crawled
+## Dates of crawling
 
-Everything has been crawled at the same time. It started the 21st of July at XX and it lasted for XX hours.
+The places, the breweries and the beers have been scraped between the 25th of July and the 1st of August 2017. 
+The users have been scraped between the 2nd and the 3rd of August 2017.
 
 ## Required packages
 
