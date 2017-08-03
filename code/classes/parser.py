@@ -793,7 +793,7 @@ class Parser:
                     place = 'Brazil'
 
                 if place in ['Alberta', 'Brandon,', 'British Columbia', 'Milton,', 'Montreal,', 'New Brunswick',
-                             'Ontario', 'Ottawa,', 'Quebec', 'Québec', 'Toronto,', 'Victoria,', 'Waterloo,',
+                             'Ontario', 'Ottawa,', 'Quebec', 'Québec,', 'Toronto,', 'Victoria,', 'Waterloo,',
                              'jonquiere,']:
                     place = 'Canada'
 
