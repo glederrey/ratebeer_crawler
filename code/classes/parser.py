@@ -585,30 +585,330 @@ class Parser:
                 if place in self.us_states:
                     place = 'United States, ' + place
 
-                # Manual fixing
-                if place == 'Wauwatosa,':
-                    place = 'United States, Wisconsin'
+                ## MANUAL FIXING ##
+                ## IN THE US ##
 
-                if place == 'coventry,' or place == 'Durham,':
-                    place = 'England'
+                if place in ['Huntsville,', 'Mobile,', 'Wedowee,']:
+                    place = 'United States, Alabama'
 
-                if place == 'Compostela (Galiza),':
-                    place = 'Spain'
+                if place in ['Fairbanks,', 'Seward,', 'Soldotna,']:
+                    place = 'United States, Alaska'
 
-                if place == 'Beckley,':
-                    place = 'United States, West Virginia'
+                if place == 'Little Rock,':
+                    place = 'United States, Arkansas'
 
-                if place == 'Berlin,':
-                    place = 'Germany'
+                if place in ['Gilbert,', 'Phoenix,', 'Prescott Valley,', 'Prescott,', 'Scottsdale,', 'Sierra Vista,',
+                             'Surprise,', 'Tempe,', 'Tucson,', 'mesa,']:
+                    place = 'United States, Arizona'
 
-                if place == 'Australia,':
-                    place = 'Australia'
+                if place in ['Aliso Viejo,', 'Atwater,', 'Burbank,', 'Brentwood,', 'California,', 'Carlsbad,',
+                             'Clovis,', 'Corona,', 'Davis,', 'Escondido,', 'Eureka,', 'Fountain Valley,', 'Fremont,',
+                             'Long Beach,', 'Los Angeles,', 'Los Gatos,', 'Lucerne Valley,', 'Magalia,',
+                             'Malibu,', 'Mission Viejo,', 'Modesto,', 'Mountain View / San Luis Obispo,', 'Oakland,',
+                             'Oceanside,', 'Porterville,', 'Rancho Santa Margarita,', 'Riverside,', 'Rocklin,',
+                             'Sacramento,', 'San Diego,', 'San Francisco,', 'San Jose,', 'San Rafael,', 'Santa Cruz,',
+                             'Santa Rosa,', 'South Pasadena,', 'Tarzana,', 'Travis AFB,', 'Vandenberg AFB,',
+                             'Victorville,', 'WHITTIER,', 'West Sacramento,', 'Woodland Hills,', 'anaheim,',
+                             'apple valley,', 'los angeles,', 'modesto,', 'oakland,', 'pinole,', 'redding,',
+                             'riverside,', 'san diego,', 'stockton,', 'vacaville,']:
+                    place = 'United States, California'
 
-                if place == 'East Lansing,':
+                if place in ['Boulder,', 'Broomfield,', 'Colorado Springs,', 'Denver,', 'Fort Collins,', 'Lakewood,',
+                             'Littleton,', 'Loveland,', 'beavercreek,', 'colorado springs,']:
+                    place = 'United States, Colorado'
+
+                if place in ['Haddam,', 'Milford,', 'Niantic,', 'Somers,', 'West Hartford,', 'fairfield,', 'groton ct,',
+                             'meriden,']:
+                    place = 'United States, Connecticut'
+
+                if place in ['Boynton Beach,', 'Cape Coral,', 'Cocoa,', 'Coral Springs,', 'DELRAY BCH,', 'Gainesville,',
+                             'Jacksonville,', 'Lakeland,', 'Mary Esther,', 'Miami,', 'Mount Dora,', 'Niceville,',
+                             'Northport,', 'Orlando,', 'Pembroke Pines,', 'Plantation,', 'Port Charlotte,',
+                             'Port St Lucie,', 'Sebastian,', 'Tallahassee,', 'Tampa,', 'central florida,', 'sarasota,',
+                             'winter garden,']:
+                    place = 'United States, Florida'
+
+                if place in ['Atlanta,', 'Decatur,', 'Lawrenceville (Atlanta),', 'Lawrenceville,', 'Norcross,',
+                             'Powder Springs,', 'Ringgold,Ga.,']:
+                    place = 'United States, Georgia'
+
+                if place in ['Albany Park,', 'CHICAGO,', 'Carbondale,', 'Carpentersville,', 'Champaign,', 'Chicago,',
+                             'Chicagoland,', 'Edwardsville,', 'Forest Glen,', 'Granite City,', 'Joliet,', 'Lisle,',
+                             'New Lenox,', 'Plainfield,', 'River Forest,', 'Schaumburg,', 'South Elgin,',
+                             'Stillman Valley,', 'Urbana,', 'central Illinois,', 'chicago,', 'hinsdale,', 'lisle,']:
+                    place = 'United States, Illinois'
+
+                if place in ['Bloomington,', 'Fishers,', 'Greenfield,', 'Indianapolis,', 'Indy,', 'Whiting,',
+                             'fort wayne,']:
+                    place = 'United States, Indiana'
+
+                if place in ['Bettendorf,', 'CEDAR RAPIDS,', 'IOWA CITY,', 'Iowa City,', 'Johnston,',
+                             'Windsor Heights,']:
+                    place = 'United States, Iowa'
+
+                if place in ['Fort Riley,', 'Kansas City,', 'Lenexa,', 'Winfield,']:
+                    place = 'United States, Kansas'
+
+                if place in ['Bowling Green,', 'Louisville,', 'clay,']:
+                    place = 'United States, Kentucky'
+
+                if place in ['Baton Rouge,', 'Bossier,city,', 'Kenner,', 'Louisiana,', 'New Orleans,', 'new orleans,']:
+                    place = 'United States, Louisiana'
+
+                if place in ['Gardiner,', 'Sabattus,', 'Saco,', 'Waterville,']:
+                    place = 'United States, Maine'
+
+                if place in ['Baltimore,', 'Darnestown,', 'Frederick,', 'Glen Arm,', 'North Bethesda,', 'Pikesville,',
+                             'baltimore,', 'gaithersburg,', 'middle river,']:
+                    place = 'United States, Maryland'
+
+                if place in ['Boston,', 'Cohasset,', 'Concord,', 'East Bridgewater,', 'FITCHBURG,', 'Lowell City,',
+                             'Natick,', 'Newbedford,', 'Newton,', 'Salem,', 'Somerville,', 'Waltham,', 'Woburn,',
+                             'boston,', 'salem,', 'walpole,', 'westford,']:
+                    place = 'United States, Massachusetts'
+
+                if place in ['Ann Arbor,', 'Au Gres,', 'East Lansing,', 'Bay CIty,', 'Bloomfield Hills,', 'Clarkston,',
+                             'Freeland,', 'Grand Rapids,', 'Grandville,', 'ISHPEMING,', 'Kalamazoo,',
+                             'Kalamazoo..Bells Paradise,', 'Lansing,', 'MI,', 'Michigan,', 'Rogers,', 'Warren,',
+                             'warren,']:
                     place = 'United States, Michigan'
 
-                if place == 'Virginia Beach,':
-                    place = ' United States, Virginia'
+                if place in ['Burnsville,', 'Cannon Falls,', 'Eden Prairie,', 'Gardner,', 'Garvin,', 'Minneapolis,',
+                             'North Branch,', 'Saint Paul,', 'Wayzata,', 'Winnebago,', 'minneapolis,']:
+                    place = 'United States, Minnesota'
+
+                if place in ['Gulfport,', 'Jackson,', 'Ocean Springs,']:
+                    place = 'United States, Mississippi'
+
+                if place in ['Independence,', 'Jefferson,', 'Nixa,', 'Raytown,', 'St Charles,', 'St. Louis,']:
+                    place = 'United States, Missouri'
+
+                if place in ['Billings,', 'Wibaux,']:
+                    place = 'United States, Montana'
+
+                if place in ['North Platte,', 'OMAHA,', 'Omaha,']:
+                    place = 'United States, Nebraska'
+
+                if place in ['Las Vegas,', 'Sparks,']:
+                    place = 'United States, Nevada'
+
+                if place in ['Barnegat,', 'Burlington,', 'Collingswood,', 'Moorestown,', 'Newark,', 'North Brunswick,',
+                             'Nutley,', 'Pitman,', 'Princeton,', 'Teaneck,', 'Waldwick,', 'West Deptford,',
+                             'glen ridge,', 'morristown,']:
+                    place = 'United States, New Jersey'
+
+                if place in ['Albuquerque,', 'Los Ranchos,', 'Santa Fe,']:
+                    place = 'United States, New Mexico'
+
+                if place in ['Albany,', 'Brooklyn,', 'CENTERPORT,', 'Columbia,', 'Commack,', 'Feura Bush,', 'Flushing,',
+                             'Fort Plain,', 'Gansevoort,', 'Gladstone,', 'Ithaca,', 'Katonah,', 'Lindenhurst,',
+                             'New York,', 'North Tonawanda,', 'Pelham,', 'Rochester,', 'The Big Apple,', 'Tonawanda,',
+                             'Westchester,', 'White Plains,', 'albany,', 'brooklyn,', 'fredonia,', 'lockport,',
+                             'patchogue,', 'port jeff sta,']:
+                    place = 'United States, New York'
+
+                if place in ['Boone,', 'Charlotte,', 'Greensboro,', 'Louisburg,', 'Norlina,', 'Raleigh,', 'Shelby,',
+                             'Tarawa Terrace,', 'Wilmington,', 'Winston-Salem,', 'fayetteville,', 'indian trail,']:
+                    place = 'United States, North Carolina'
+
+                if place in ['Centerville,', 'Cincinnati,', 'Cleveland,', 'Columbus,', 'Dayton,', 'HAMILTON OHIO,',
+                             'Powell,', 'SAINT BERNARD,', 'Springboro,', 'Springfield,', 'Tiffin,', 'akron,',
+                             'cleveland,', 'middle point,', 'north royalton,', 'oregonia,']:
+                    place = 'United States, Ohio'
+
+                if place in ['Jenks,', 'Middleberg,', 'NORMAN,', 'Shawnee,', 'owasso,']:
+                    place = 'United States, Oklahoma'
+
+                if place in ['Astoria,', 'Bend,', 'Eugene,', 'Hillsboro,', 'Oregon City,', 'Portland,', 'Scio,']:
+                    place = 'United States, Oregon'
+
+                if place in ['Aliquippa,', 'East Stroudsburg,', 'Erie,', 'Harrison,', 'Lock Haven,', 'Lower Burrell,',
+                             'Mechanicsburg,', 'Mount Pocono,', 'New Cumberland,', 'PA,', 'Philadelphia,', 'Philly,',
+                             'Pittsburgh,', 'Pocono Summit,', 'Red Lion,', 'Ridley Park,', 'Valley Forge,', 'cresson,',
+                             'fenelton,', 'philadelphia,', 'roaring spring,']:
+                    place = 'United States, Pennsylvania'
+
+                if place == 'North Providence,':
+                    place = 'United States, Rhode Island'
+
+                if place in ['Bluffton,', 'Charleston,', 'Clemson,', 'travelers rest,']:
+                    place = 'United States, South Carolina'
+
+                if place == 'Spearfish,':
+                    place = 'United States, South Dakota'
+
+                if place in ['Chattanooga,', 'Knoxville,']:
+                    place = 'United States, Tennessee'
+
+                if place in ['Amarillo City,', 'Aransas Pass,', 'Arlington,', 'Austin,', 'Baytown,', 'Bryan,',
+                             'Carrollton,', 'Dallas,', 'El Paso,', 'Frisco (Dallas),', 'Hewitt,', 'Houston,', 'Irving,',
+                             'Killeen,', 'Kingwood,', 'Nolanville,', 'Republic of Texas,', 'San Antonio,', 'Timpson,',
+                             'anna,', 'dallas,', 'helotes,', 'kyle,', 'plano,']:
+                    place = 'United States, Texas'
+
+                if place in ['Herriman,', 'LEHI,', 'Salt Lake City,', 'West Valley City,', 'clinton,',
+                             'north salt lake,']:
+                    place = 'United States, Utah'
+
+                if place == 'montpelier,':
+                    place = 'United States, Vermont'
+
+                if place in ['Virginia Beach,', 'Nellysford,', 'Norfolk,', 'Richmond,', 'Staunton,']:
+                    place = 'United States, Virginia'
+
+                if place in ['Bellingham,', 'Bremerton,', 'Chehalis,', 'DC Metro Area,', 'Kelso,', 'Millcreek,',
+                             'Oak Harbor,', 'Olympia,', 'Puyallup,', 'Renton,', 'Rosedale,', 'Seattle,', 'Tacoma,',
+                             'Washington DC', 'Washington,', 'Washougal,']:
+                    place = 'United States, Washington'
+
+                if place in ['Beckley,', 'Elkins,', 'Huntington,']:
+                    place = 'United States, West Virginia'
+
+                if place in ['Wauwatosa,', 'Eau Claire,', 'Green Bay,', 'Madison,', 'Milwaukee,', 'New Berlin,',
+                             'Oshkosh,', 'Phillips,', 'River Falls,', 'Stevens Point,', 'Stoughton,', 'Whitefish Bay,']:
+                    place = 'United States, Wisconsin'
+
+                if place == 'Sheridan,':
+                    place = 'United States, Wyoming'
+
+                ## OUTSIDE US ##
+
+                if place in ['Australia,', 'Brisbane,', 'Geelong,', 'Newtown,', 'Pental Island,', 'Tasmania,',
+                             'brunswick,']:
+                    place = 'Australia'
+
+                if place in ['Vienna,', 'Wien,']:
+                    place = 'Austria'
+
+                if place == 'flanders,':
+                    place = 'Belgium'
+
+                if place in ['Mostar,', 'Sarajevo,']:
+                    place = 'Bosnia and Herzegovina'
+
+                if place == 'Sofia,':
+                    place = 'Bulgaria'
+
+                if place in ['campinas,', 'santa branca,']:
+                    place = 'Brazil'
+
+                if place in ['Alberta', 'Brandon,', 'British Columbia', 'Milton,', 'Montreal,', 'New Brunswick',
+                             'Ontario', 'Ottawa,', 'Quebec', 'Québec', 'Toronto,', 'Victoria,', 'Waterloo,',
+                             'jonquiere,']:
+                    place = 'Canada'
+
+                if place == 'valparaiso,':
+                    place = 'Chile'
+
+                if place == 'canton':
+                    place = 'China'
+
+                if place == 'CROATIA,':
+                    place = 'Croatia'
+
+                if place == 'ostrava,':
+                    place = 'Czech Republic'
+
+                if place == 'copenhagen,':
+                    place = 'Denmark'
+
+                if place in ['Butt Burp Egypt,', 'Mount Sinai,']:
+                    place = 'Egypt'
+
+                if place in ['coventry,', 'Durham,', 'BROMLEY,', 'Banbury,', 'Bedford,', 'Berwick,', 'Bingley,',
+                             'Birmingham,', 'Brighton,', 'Bristol,', 'Byrness,', 'Cambridge,', 'Carlisle,', 'Chelsea,',
+                             'East Molesey,', 'Exeter,', 'Faversham,', 'Greater London', 'HAYWARDS HEATH,',
+                             'Hillsborough,', 'Houghton,', 'Kendal,', 'Lancaster,', 'Leicester,', 'Lockport,',
+                             'London,', 'Manchester,', 'Nottingham,', 'Oxford,', 'Plymouth,', 'Plynouth,',
+                             'Portsmouth,', 'PoultonLancashire,', 'Reading,', 'Solihull,', 'Southampton,', 'Stafford,',
+                             'Wells,', 'Westminster,', 'Woodley,', 'Worcester,', 'jarrow,', 'nottingham,',
+                             'summertown,', 'taunton,']:
+                    place = 'England'
+
+                if place in ['Macon,', 'st germain en laye,']:
+                    place = 'France'
+
+                if place in ['Berlin,', 'Hadamar,', 'Marienwerder bei Bernau bei Berl,']:
+                    place = 'Germany'
+
+                if place == 'sepolia,':
+                    place = 'Greece'
+
+                if place in ['Pearl,', 'hawaii,']:
+                    place = 'Hawaii'
+
+                if place in ['Budapest,', 'Budaörs,', 'Dunakeszi,', 'Esztergom,', 'Fót,', 'Hajdúnánás,']:
+                    place = 'Hungary'
+
+                if place == 'Dublin,':
+                    place = 'Ireland'
+
+                if place in ['Italia,', 'Venice,', 'roma,']:
+                    place = 'Italy'
+
+                if place == 'KENYA,':
+                    place = 'Kenya'
+
+                if place == 'Lebanon,':
+                    place = 'Lebanon'
+
+                if place == 'La Paz,':
+                    place = 'Mexico'
+
+                if place in ['Breda,', 'Holland,', 'leiden,']:
+                    place = 'Netherlands'
+
+                if place == 'Bergen,':
+                    place = 'Norway'
+
+                if place == 'Palestine/West Bank':
+                    place = 'Palestine'
+
+                if place in ['D±browa Górnicza,', 'Mysłowice,', 'UPPER SILESIA,', 'Wrocław,', 'poznan,']:
+                    place = 'Poland'
+
+                if place == 'Fatima,':
+                    place = 'Portugal'
+
+                if place in ['Black Earth,', 'Moscow,', 'SAINT PETERSBURG,', 'Saint-Petersburg,']:
+                    place = 'Russia'
+
+                if place == 'St Helena':
+                    place = 'Saint Helena'
+
+                if place in ['Aberdeen,', 'Edinburgh,', 'Glasgow,', 'Midlothian,', 'Motherwell,']:
+                    place = 'Scotland'
+
+                if place == 'Belgrade,':
+                    place = 'Serbia'
+
+                if place in ['Pova\x9eská Bystrica,', 'Trnava,']:
+                    place = 'Slovakia'
+
+                if place in ['Compostela (Galiza),', 'BARCELONA,', 'Badalona,', 'Barcelona,', 'Bilbao,', 'CATALONIA,',
+                             'Catalunya,', 'Figueres,', 'Galicia,', 'Galiza,', 'Getxo (Basque Country),', 'Gijón,',
+                             'Girona,', 'Manresa,', 'Sabadell,', 'Sant Cugat,', 'Sant Julià de Vilatorta,',
+                             'Sant Quirze De Besora,', 'barcelona,', 'spain,', 'toledo,']:
+                    place = 'Spain'
+
+                if place in ['Ljungbyholm,', 'Malmö,', 'Nossebro,', 'Stockholm,', 'Vallentuna,', 'Örebro,']:
+                    place = 'Sweden'
+
+                if place == 'pully,':
+                    place = 'Switzerland'
+
+                if place in ['CARDIFF,', 'Cardiff,']:
+                    place = 'Wales'
+
+                if place in ['APO AE,', 'APO,', 'Anytown,', 'Arcadia,', 'Bartlett,', 'Belgrade / Hamburg,', 'Benton,',
+                             'Bled/SF,', 'Capital City,', 'Coolest place on EArth,', 'Cranford,', 'Echo,', 'FPO AP,',
+                             'Graveyard,', 'Gùrny Slùnsk / Oberschlesien,', 'Hook,', 'K,', 'Keystone,',
+                             'Marijuanaville,', 'Mendota,', 'Moab,', 'Monroe,', 'Mutriku/Rio Gallegos,',
+                             'New England,', 'Operation Joint Forge,', 'Sa,', 'Savage,', 'Sittingbourne / Bydgoszcz,',
+                             'The Sea,', 'USA,', 'United Kingdom,', 'Val Verde,', 'WY & Chicagoland,', 'anywhere usa,',
+                             'beanercentral,', 'bibilau,', 'http://westchesterbeer.com,', 'imperial,', 'mtn home afb,',
+                             'n/a', 'pampa,']:
+                    place = np.nan
 
                 ### TO CONTINUE WITH ALL USERS ###
 
