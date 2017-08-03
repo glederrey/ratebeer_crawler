@@ -800,7 +800,7 @@ class Parser:
                 if place == 'valparaiso,':
                     place = 'Chile'
 
-                if place == 'canton':
+                if place == 'canton,':
                     place = 'China'
 
                 if place == 'CROATIA,':
