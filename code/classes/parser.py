@@ -355,6 +355,8 @@ class Parser:
                 list_ = os.listdir(folder)
                 list_.sort()
 
+                list_users = []
+
                 for file in list_:
 
                     # Open the file
@@ -377,7 +379,6 @@ class Parser:
                     grp = re.finditer(str_, html_txt)
 
                     for g in grp:
-                        count += 1
                         rating = float(g.group(1))
 
                         appearance = int(g.group(3))
@@ -388,6 +389,12 @@ class Parser:
 
                         user_name = g.group(9)
                         user_id = int(g.group(8))
+
+                        if user_name in list_users:
+                            add_rev = False
+                        else:
+                            list_users.append(user_name)
+                            add_rev = True
 
                         text = g.group(13)
 
@@ -431,26 +438,29 @@ class Parser:
                         # Clean the text
                         text = re.sub('<[^>]+>', '', text)
 
-                        # Write to file
-                        f.write('beer_name: {}\n'.format(row['beer_name']).encode('utf-8'))
-                        f.write('beer_id: {:d}\n'.format(row['beer_id']).encode('utf-8'))
-                        f.write('brewery_name: {}\n'.format(row['brewery_name']).encode('utf-8'))
-                        f.write('brewery_id: {:d}\n'.format(row['brewery_id']).encode('utf-8'))
-                        f.write('style: {}\n'.format(row['style']).encode('utf-8'))
-                        f.write('abv: {}\n'.format(row['abv']).encode('utf-8'))
-                        f.write('date: {:d}\n'.format(date).encode('utf-8'))
-                        f.write('user_name: {}\n'.format(user_name).encode('utf-8'))
-                        f.write('user_id: {:d}\n'.format(user_id).encode('utf-8'))
-                        f.write('appearance: {:d}\n'.format(appearance).encode('utf-8'))
-                        f.write('aroma: {:d}\n'.format(aroma).encode('utf-8'))
-                        f.write('palate: {:d}\n'.format(palate).encode('utf-8'))
-                        f.write('taste: {:d}\n'.format(taste).encode('utf-8'))
-                        f.write('overall: {:d}\n'.format(overall).encode('utf-8'))
-                        f.write('rating: {:.2f}\n'.format(rating).encode('utf-8'))
-                        f.write('text: {}\n'.format(text).encode('utf-8'))
-                        f.write('\n'.encode('utf-8'))
+                        if add_rev:
+                            count += 1
 
-            if count < nbr_rat:
+                            # Write to file
+                            f.write('beer_name: {}\n'.format(row['beer_name']).encode('utf-8'))
+                            f.write('beer_id: {:d}\n'.format(row['beer_id']).encode('utf-8'))
+                            f.write('brewery_name: {}\n'.format(row['brewery_name']).encode('utf-8'))
+                            f.write('brewery_id: {:d}\n'.format(row['brewery_id']).encode('utf-8'))
+                            f.write('style: {}\n'.format(row['style']).encode('utf-8'))
+                            f.write('abv: {}\n'.format(row['abv']).encode('utf-8'))
+                            f.write('date: {:d}\n'.format(date).encode('utf-8'))
+                            f.write('user_name: {}\n'.format(user_name).encode('utf-8'))
+                            f.write('user_id: {:d}\n'.format(user_id).encode('utf-8'))
+                            f.write('appearance: {:d}\n'.format(appearance).encode('utf-8'))
+                            f.write('aroma: {:d}\n'.format(aroma).encode('utf-8'))
+                            f.write('palate: {:d}\n'.format(palate).encode('utf-8'))
+                            f.write('taste: {:d}\n'.format(taste).encode('utf-8'))
+                            f.write('overall: {:d}\n'.format(overall).encode('utf-8'))
+                            f.write('rating: {:.2f}\n'.format(rating).encode('utf-8'))
+                            f.write('text: {}\n'.format(text).encode('utf-8'))
+                            f.write('\n'.encode('utf-8'))
+
+            if count != nbr_rat:
                 # If there's a problem in the HTML file, we replace the count of ratings
                 # with the number we have now.
                 df = df.set_value(i, 'nbr_ratings', count)
