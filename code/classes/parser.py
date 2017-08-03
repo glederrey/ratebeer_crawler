@@ -910,8 +910,6 @@ class Parser:
                              'n/a', 'pampa,']:
                     place = np.nan
 
-                ### TO CONTINUE WITH ALL USERS ###
-
                 # Change to conventional name
                 if place in self.country_to_change.keys():
                     place = self.country_to_change[place]
