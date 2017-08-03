@@ -551,7 +551,11 @@ class Parser:
             str_ = 'Member since ([^<]*)'
 
             grp = re.search(str_, html_txt)
-            str_date = grp.group(1)
+            try:
+                str_date = grp.group(1)
+            except AttributeError:
+                print(file)
+                asd
 
             # Transform string to epoch
             month = time.strptime(str_date.split(' ')[0], '%b').tm_mon

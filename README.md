@@ -81,8 +81,8 @@ create a CSV file (*beers.csv*)
 
 ## Dates of crawling
 
-The places, the breweries and the beers have been scraped between the 25th of July and the 1st of August 2017. 
-The users have been scraped between the 2nd and the 3rd of August 2017.
+The places, the breweries and the beers have been crawled between the 25th of July and the 1st of August 2017. 
+The users have been crawled between the 2nd and the 3rd of August 2017.
 
 ## Required packages
 
