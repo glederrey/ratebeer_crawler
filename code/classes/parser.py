@@ -567,9 +567,10 @@ class Parser:
             # Get the location
             str_ = '<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> ([^<]*)'
             grp = re.search(str_, html_txt)
-            place = grp.group(1).replace('\n', '').replace('\r', '').replace('\t', '')
 
             try:
+                place = grp.group(1).replace('\n', '').replace('\r', '').replace('\t', '')
+
                 # Remove the space at the end of the string
                 while place[-1] == ' ':
                     place = place[:-1]
