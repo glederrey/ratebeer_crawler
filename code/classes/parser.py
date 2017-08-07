@@ -43,7 +43,9 @@ class Parser:
                                   'St Lucia': 'Saint Lucia',
                                   'St Vincent & The Grenadines': 'Saint Vincent and The Grenadines',
                                   'São Tomé & Principe': 'Sao Tome and Principe',
-                                  'Senegal Republic': 'Senegal'}
+                                  'Senegal Republic': 'Senegal',
+                                  'Antigua & Barbuda': 'Antigua and Barbuda',
+                                  'Trinidad & Tobago': 'Trinidad and Tobago'}
 
         self.us_states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
                           'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
