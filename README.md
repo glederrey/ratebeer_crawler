@@ -49,9 +49,9 @@ the list of key-value pairs with their type (that you have to change):
 | **text**         | str   | Text of the rating                    |                                                       |
 | **date**         | int   | Date of the review in UNIX Epoch      | No access to time of the day. => Time is always noon. |
 
-## Link to the crawled data
+## Access to the data
 
-**TO BE UPDATED!!**
+Please contact directly [Robert West](mailto:robert.west@epfl.ch) and/or [Gael Lederrey](mailto:gael.lederrey@epfl.ch) to get the data. 
 
 ## Some Numbers
 
